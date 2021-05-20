@@ -14,14 +14,14 @@
  */
 package org.pitest.classinfo;
 
+import org.pitest.util.IsolationUtils;
+import org.pitest.util.Log;
+
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
-
-import org.pitest.util.IsolationUtils;
-import org.pitest.util.Log;
 
 public final class ClassName implements Comparable<ClassName>, Serializable {
 
@@ -31,6 +31,7 @@ public final class ClassName implements Comparable<ClassName>, Serializable {
   private static final ClassName OBJECT = new ClassName("java/lang/Object");
   private static final ClassName STRING = new ClassName("java/lang/String");
 
+  // always stored in java/lang/String "internal" format
   private final String        name;
 
   private ClassName(final String name) {
@@ -64,8 +65,7 @@ public final class ClassName implements Comparable<ClassName>, Serializable {
   public ClassName getNameWithoutPackage() {
     final int lastSeparator = this.name.lastIndexOf('/');
     if (lastSeparator != -1) {
-      return ClassName.fromString(this.name.substring(lastSeparator + 1,
-          this.name.length()));
+      return ClassName.fromString(this.name.substring(lastSeparator + 1));
     }
     return this;
   }
@@ -82,8 +82,7 @@ public final class ClassName implements Comparable<ClassName>, Serializable {
     final String nameWithoutPackage = this.getNameWithoutPackage().asJavaName();
     return ClassName.fromString(this.getPackage().asJavaName()
         + "/"
-        + nameWithoutPackage.substring(prefixLength,
-            nameWithoutPackage.length()));
+        + nameWithoutPackage.substring(prefixLength));
   }
 
   public ClassName withoutSuffixChars(final int suffixLength) {
@@ -95,7 +94,7 @@ public final class ClassName implements Comparable<ClassName>, Serializable {
   }
 
   public static Function<String, ClassName> stringToClassName() {
-    return clazz -> ClassName.fromString(clazz);
+    return ClassName::fromString;
   }
 
   public static Function<ClassName, Stream<Class<?>>> nameToClass() {
@@ -117,11 +116,8 @@ public final class ClassName implements Comparable<ClassName>, Serializable {
         LOG.warning("Could not load " + className
             + " (NoClassDefFoundError: " + e2.getMessage() + ")");
         return Stream.empty();
-      } catch (final LinkageError e3) {
+      } catch (final LinkageError | SecurityException e3) {
         LOG.warning("Could not load " + className + " " + e3.getMessage());
-        return Stream.empty();
-      } catch (final SecurityException e4) {
-        LOG.warning("Could not load " + className + " " + e4.getMessage());
         return Stream.empty();
       }
     };
@@ -151,7 +147,7 @@ public final class ClassName implements Comparable<ClassName>, Serializable {
 
   @Override
   public int compareTo(final ClassName o) {
-    return this.asJavaName().compareTo(o.asJavaName());
+    return this.name.compareTo(o.name);
   }
 
 }

@@ -8,6 +8,22 @@ Read all about it at http://pitest.org
 
 ## Releases
 
+### 1.6.6
+
+* #891 - Fix history performance
+* #889 - Do not scan classpath for history when option not supplied
+* #887 - Fix css for timeouts and memory errors
+* #888 - Remove defunct max mutants per class perameter
+* #890 - Remove defunct mutate static initalizers parameter
+
+### 1.6.5
+
+* #882 Avoid running tests when no mutants possible
+
+### 1.6.4
+
+* #862 Update ASM for Java 16
+
 ### 1.6.3
 
 * #853 Fix case insensitive feature check
@@ -51,6 +67,9 @@ Read all about it at http://pitest.org
 * #726 - Ensure static initializer coverage is recorded 
 * #734/#735/#736 - Replace legacy interfaces with Java API (thanks @AlexElin)
 
+<details>
+    <summary>Older versions</summary>
+
 ### 1.4.11
 
 * #683 - Filter try-with-resources before filtering inlined code (thanks @Vampire)
@@ -93,9 +112,6 @@ Read all about it at http://pitest.org
 ### 1.4.5
 
 * #557 - Issues running on Java 8
-
-<details>
-    <summary>Older versions</summary>
 
 ### 1.4.4
  

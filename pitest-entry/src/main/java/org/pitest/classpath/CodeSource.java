@@ -9,6 +9,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.pitest.classinfo.ClassByteArraySource;
 import org.pitest.classinfo.ClassInfo;
 import org.pitest.classinfo.ClassInfoSource;
 import org.pitest.classinfo.ClassName;
@@ -21,7 +22,7 @@ import org.pitest.functional.Streams;
 /**
  * Provides access to code and tests on the classpath
  */
-public class CodeSource implements ClassInfoSource {
+public class CodeSource implements ClassInfoSource, ClassByteArraySource {
 
   private final ProjectClassPaths   classPath;
   private final Repository          classRepository;
@@ -75,7 +76,6 @@ public class CodeSource implements ClassInfoSource {
         .collect(Collectors.toList());
   }
 
-  // not used but keep to allow plugins to query bytecode
   public Optional<byte[]> fetchClassBytes(final ClassName clazz) {
     return this.classRepository.querySource(clazz);
   }
@@ -87,7 +87,11 @@ public class CodeSource implements ClassInfoSource {
 
   private Function<ClassName, Stream<ClassInfo>> nameToClassInfo() {
     return new NameToClassInfo(this.classRepository)
-        .andThen(opt -> Streams.fromOptional(opt));
+        .andThen(Streams::fromOptional);
   }
 
+  @Override
+  public Optional<byte[]> getBytes(String clazz) {
+    return fetchClassBytes(ClassName.fromString(clazz));
+  }
 }
