@@ -119,7 +119,7 @@ class MutatingClassVisitor extends ClassVisitor {
   private MethodVisitor wrapWithFilters(MethodMutationContext methodContext,
       final MethodVisitor wrappedMethodVisitor) {
     return
-        wrapWithStringSwitchFilter(methodContext, wrapWithAssertFilter(methodContext, wrappedMethodVisitor));
+        wrapWithStringSwitchFilter(methodContext, /*wrapWithAssertFilter(methodContext, */wrappedMethodVisitor/*)*/);
   }
 
   private static MethodVisitor wrapWithStringSwitchFilter(
@@ -129,10 +129,10 @@ class MutatingClassVisitor extends ClassVisitor {
 
   }
 
-  private static MethodVisitor wrapWithAssertFilter(
+  /*private static MethodVisitor wrapWithAssertFilter(
       MethodMutationContext methodContext,
       final MethodVisitor wrappedMethodVisitor) {
     return new AvoidAssertsMethodAdapter(methodContext, wrappedMethodVisitor);
-  }
+  }*/
 
 }
