@@ -320,7 +320,7 @@ public final class Mutator {
   public static Collection<MethodMutatorFactory> newDefaults() {
     return combine(group(InvertNegsMutator.INVERT_NEGS_MUTATOR,
         MathMutator.MATH_MUTATOR,
-        VoidMethodCallMutator.VOID_METHOD_CALL_MUTATOR,
+        /* VoidMethodCallMutator.VOID_METHOD_CALL_MUTATOR, */
         NegateConditionalsMutator.NEGATE_CONDITIONALS_MUTATOR,
         ConditionalsBoundaryMutator.CONDITIONALS_BOUNDARY_MUTATOR,
         IncrementsMutator.INCREMENTS_MUTATOR), betterReturns());
